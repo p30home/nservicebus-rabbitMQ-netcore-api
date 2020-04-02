@@ -76,7 +76,7 @@ namespace WebApi.Services
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            return token;
+            return tokenHandler.WriteToken(token);
         }
 
         public IEnumerable<User> GetAll()
