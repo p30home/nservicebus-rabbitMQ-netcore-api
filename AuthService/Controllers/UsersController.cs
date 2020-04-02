@@ -19,14 +19,29 @@ namespace AuthService.Controllers
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody]RegisterViewModel model)
+        public IActionResult Authenticate([FromBody]LoginViewModel model)
         {
-            var user = _userService.Authenticate(model.Email, model.Password);
+            var token = _userService.Authenticate(model.Email, model.Password);
 
-            if (user == null)
+            if (token == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
 
-            return Ok(user);
+            return Ok(new { token = token });
+        }
+
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public IActionResult Register([FromBody]RegisterViewModel model)
+        {
+            try
+            {
+                var user = _userService.Register(model.FirstName, model.LastName, model.Email, model.Password);
+                return Ok(new { message = $"{user.Username} created successfully, now you can login with provided username and password" });
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpGet]

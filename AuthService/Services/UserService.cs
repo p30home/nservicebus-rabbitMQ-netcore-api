@@ -14,7 +14,7 @@ namespace WebApi.Services
 {
     public interface IUserService
     {
-        User Authenticate(string username, string password);
+        string Authenticate(string username, string password);
         User Register(string firstName, string lastName, string username, string password);
         IEnumerable<User> GetAll();
     }
@@ -48,11 +48,13 @@ namespace WebApi.Services
                 PasswordHash = CryptoAlgorithms.SHA256(password)
             };
 
+            usersRepository.Add(user);
+
             return user;
 
 
         }
-        public User Authenticate(string username, string password)
+        public string Authenticate(string username, string password)
         {
             var user = usersRepository.Find(x => x.Username == username && x.PasswordHash == CryptoAlgorithms.SHA256(password));
 
@@ -73,14 +75,13 @@ namespace WebApi.Services
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            user.Token = tokenHandler.WriteToken(token);
 
-            return user.WithoutPassword();
+            return token;
         }
 
         public IEnumerable<User> GetAll()
         {
-            return usersRepository.All().WithoutPasswords();
+            return usersRepository.All();
         }
 
     }
