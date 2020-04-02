@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using AuthService.Helpers;
+using AuthService.Services;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Models;
@@ -13,24 +14,23 @@ namespace WebApi.Services
 {
     public interface IUserService
     {
-        User Authenticate(string username, string password);    
-        User Register(string username,string password);    
+        User Authenticate(string username, string password);
+        User Register(string username, string password);
         IEnumerable<User> GetAll();
     }
 
     public class UserService : IUserService
     {
-        // users hardcoded for simplicity, store in a db with hashed passwords in production applications
-        private List<User> _users = new List<User>
-        { 
-            new User { Id = 1, FirstName = "Test", LastName = "User", Username = "test@gmail.com", Password = "test" } 
-        };
 
+        // users hardcoded for simplicity, store in a db with hashed passwords in production applications
+
+        private UsersRepository usersRepository;
         private readonly AppSettings _appSettings;
 
-        public UserService(IOptions<AppSettings> appSettings)
+        public UserService(IOptions<AppSettings> appSettings, UsersRepository usersRepository)
         {
             _appSettings = appSettings.Value;
+            this.usersRepository = usersRepository;
         }
 
 
@@ -41,7 +41,7 @@ namespace WebApi.Services
 
         public User Authenticate(string username, string password)
         {
-            var user = _users.SingleOrDefault(x => x.Username == username && x.Password == password);
+            var user = usersRepository.All().SingleOrDefault(x => x.Username == username && x.Password == password);
 
             // return null if user not found
             if (user == null)
@@ -52,7 +52,7 @@ namespace WebApi.Services
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[] 
+                Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Name, user.Id.ToString())
                 }),
@@ -67,7 +67,7 @@ namespace WebApi.Services
 
         public IEnumerable<User> GetAll()
         {
-            return _users.WithoutPasswords();
+            return usersRepository.All().WithoutPasswords();
         }
 
     }
