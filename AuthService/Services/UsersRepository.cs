@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Models;
@@ -13,7 +14,7 @@ namespace AuthService.Services
                 FirstName = "test",
                 LastName = "test",
                 Username = "test@gmail.com",
-                Password = "test"
+                PasswordHash = CryptoAlgorithms.SHA256("test")
             }
         };
 
@@ -25,6 +26,14 @@ namespace AuthService.Services
             }
 
             return user;
+        }
+
+        public User Find(Func<User, bool> predicate)
+        {
+            lock (_Lock)
+            {
+                return _Users.Where(a => predicate(a)).FirstOrDefault();
+            }
         }
 
         public ICollection<User> All()

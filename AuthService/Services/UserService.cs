@@ -15,7 +15,7 @@ namespace WebApi.Services
     public interface IUserService
     {
         User Authenticate(string username, string password);
-        User Register(string username, string password);
+        User Register(string firstName, string lastName, string username, string password);
         IEnumerable<User> GetAll();
     }
 
@@ -34,14 +34,27 @@ namespace WebApi.Services
         }
 
 
-        public User Register(string username, string password)
+        public User Register(string firstName, string lastName, string username, string password)
         {
-            throw new NotImplementedException();
-        }
+            var user = usersRepository.Find(x => x.Username == username);
+            if (user != null)
+                throw new Exception("Provided email address is taken");
 
+            user = new User
+            {
+                FirstName = firstName,
+                LastName = lastName,
+                Username = username,
+                PasswordHash = CryptoAlgorithms.SHA256(password)
+            };
+
+            return user;
+
+
+        }
         public User Authenticate(string username, string password)
         {
-            var user = usersRepository.All().SingleOrDefault(x => x.Username == username && x.Password == password);
+            var user = usersRepository.Find(x => x.Username == username && x.PasswordHash == CryptoAlgorithms.SHA256(password));
 
             // return null if user not found
             if (user == null)
