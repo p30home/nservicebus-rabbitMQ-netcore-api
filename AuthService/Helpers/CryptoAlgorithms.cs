@@ -2,7 +2,7 @@ using System;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
-namespace Models
+namespace AuthService.Helpers
 {
     public class CryptoAlgorithms
     {

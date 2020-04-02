@@ -8,6 +8,8 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using AuthService.Helpers;
 using AuthService.Services;
+using AuthService.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuthService
 {
@@ -29,6 +31,8 @@ namespace AuthService
             // configure strongly typed settings objects
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
+
+            services.AddDbContext<AppDbContext>(config => config.UseInMemoryDatabase("interview"));
 
             // configure jwt authentication
             var appSettings = appSettingsSection.Get<AppSettings>();

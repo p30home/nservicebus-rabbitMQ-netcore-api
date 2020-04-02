@@ -8,7 +8,7 @@ using AuthService.Helpers;
 using AuthService.Services;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Models;
+using AuthService.Models;
 
 namespace WebApi.Services
 {
@@ -24,19 +24,20 @@ namespace WebApi.Services
 
         // users hardcoded for simplicity, store in a db with hashed passwords in production applications
 
-        private UsersRepository usersRepository;
+        
         private readonly AppSettings _appSettings;
+        private readonly AppDbContext _dbContext;
 
-        public UserService(IOptions<AppSettings> appSettings, UsersRepository usersRepository)
+        public UserService(IOptions<AppSettings> appSettings, AppDbContext dbContext)
         {
             _appSettings = appSettings.Value;
-            this.usersRepository = usersRepository;
+            _dbContext = dbContext;
         }
 
 
         public User Register(string firstName, string lastName, string username, string password)
         {
-            var user = usersRepository.Find(x => x.Username == username);
+            var user = _dbContext.Users.FirstOrDefault(x => x.Username == username);
             if (user != null)
                 throw new Exception("Provided email address is taken");
 
@@ -48,7 +49,7 @@ namespace WebApi.Services
                 PasswordHash = CryptoAlgorithms.SHA256(password)
             };
 
-            usersRepository.Add(user);
+            _dbContext.Users.Add(user);
 
             return user;
 
@@ -56,7 +57,7 @@ namespace WebApi.Services
         }
         public string Authenticate(string username, string password)
         {
-            var user = usersRepository.Find(x => x.Username == username && x.PasswordHash == CryptoAlgorithms.SHA256(password));
+            var user = _dbContext.Users.FirstOrDefault(x => x.Username == username && x.PasswordHash == CryptoAlgorithms.SHA256(password));
 
             // return null if user not found
             if (user == null)
@@ -81,7 +82,7 @@ namespace WebApi.Services
 
         public IEnumerable<User> GetAll()
         {
-            return usersRepository.All();
+            return _dbContext.Users.ToList();
         }
 
     }
