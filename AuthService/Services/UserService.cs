@@ -50,7 +50,7 @@ namespace WebApi.Services
             };
 
             _dbContext.Users.Add(user);
-
+            _dbContext.SaveChanges();
             return user;
 
 

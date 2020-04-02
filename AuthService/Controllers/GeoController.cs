@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using AuthService.Models;
 using AuthService.Services;
 using AuthService.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -11,17 +13,45 @@ namespace AuthService.Controllers
     [Route("[controller]")]
     public class GeoController : ControllerBase
     {
-        private UsersRepository repository;
+        private AppDbContext _dbContext;
 
-        public GeoController(UsersRepository repository)
+        public GeoController(AppDbContext dbContext)
         {
-            this.repository = repository;
+            _dbContext = dbContext;
         }
 
+
+        [HttpPost("CalculateDistance")]
         public IActionResult CalculateDistance([FromBody]GeoPointsViewModel model)
         {
             var result = distance(model.FromLat, model.FromLong, model.ToLat, model.ToLong);
+            _dbContext.ResultHistories.Add(new ResultHistory
+            {
+                UserId = User.Identity.Name,
+                DistanceResult = result,
+                FromLat = model.FromLat,
+                FromLong = model.FromLong,
+                ToLat = model.ToLat,
+                ToLong = model.ToLong
+            });
+
+            _dbContext.SaveChanges();
             return Ok(result);
+        }
+
+        [HttpGet("history")]
+        public IActionResult History()
+        {
+            var histories = _dbContext.ResultHistories.Where(c => c.UserId == User.Identity.Name).Select(c => new
+            {
+                c.FromLong,
+                c.FromLat,
+                c.ToLong,
+                c.ToLat,
+                c.DistanceResult
+            }).ToList();
+
+            return Ok(histories);
         }
 
 
