@@ -73,3 +73,5 @@ response body: (you will get a different one)
 ```
 
 next api calls must be authorized with token received in the last api call as Bearer token
+
+calculate distance between two geolocation points _http://localhost:5000/Geo/Calculate
