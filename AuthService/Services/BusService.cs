@@ -23,14 +23,14 @@ namespace AuthService.Services
         public async Task SaveGeoLineResult(GeoLineResult geoLineResult)
         {
             var sendOptions = new SendOptions();
-            sendOptions.SetDestination("GeoAPI.Storage");
+            sendOptions.SetDestination("GeoAPI.StorageService");
             await _messageSession.Send(geoLineResult, sendOptions);
         }
 
         public async Task<GeoLineHistories> GetGeoLineHistories(GetGeoLineHistory geoLineHistory)
         {
             var sendOptions = new SendOptions();
-            sendOptions.SetDestination("GeoAPI.Storage");
+            sendOptions.SetDestination("GeoAPI.StorageService");
             var geoHistory = await _messageSession.Request<GeoLineHistories>(geoLineHistory, sendOptions);
             return geoHistory;
         }

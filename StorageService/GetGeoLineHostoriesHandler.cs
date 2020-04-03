@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using NServiceBus;
+using NServiceBus.Logging;
 using Shared;
 using StorageService.Models;
 
@@ -8,6 +9,7 @@ namespace StorageService
 {
     public class GetGeoLineHostoriesHandler : IHandleMessages<GetGeoLineHistory>
     {
+        private static ILog log = LogManager.GetLogger<GetGeoLineHostoriesHandler>();
         private AppDbContext _appDbContext;
 
         public GetGeoLineHostoriesHandler(AppDbContext appDbContext)
@@ -16,6 +18,7 @@ namespace StorageService
         }
         public Task Handle(GetGeoLineHistory message, IMessageHandlerContext context)
         {
+            log.Info($"new GetGeoHistoryRequest : {message}");
             var histories = _appDbContext.ResultHistories.Where(c => c.UserId == message.UserId).Select(c => new GeoLineResult
             {
                 Distance = c.DistanceResult,

@@ -65,7 +65,8 @@ namespace AuthService.Controllers
         [HttpGet("history")]
         public async Task<IActionResult> History()
         {
-            var histories = (await _busService.GetGeoLineHistories(new GetGeoLineHistory { UserId = User.Identity.Name })).GeoLines.Select(c => new
+            var result = await _busService.GetGeoLineHistories(new GetGeoLineHistory { UserId = User.Identity.Name });
+            var histories = result.GeoLines.Select(c => new
             {
                 c.FromLong,
                 c.FromLat,
