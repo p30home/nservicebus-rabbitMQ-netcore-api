@@ -7,7 +7,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using AuthService.Helpers;
-using AuthService.Services;
 using AuthService.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -53,11 +52,6 @@ namespace AuthService
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
-            });
-
-            services.AddSingleton<UsersRepository>(ctx =>
-            {
-                return new UsersRepository();
             });
 
             // configure DI for application services
