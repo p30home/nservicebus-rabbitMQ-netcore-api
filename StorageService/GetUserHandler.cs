@@ -17,22 +17,30 @@ namespace StorageService
         private AppDbContext _appDbContext;
 
         public Task Handle(GetUserRequest message, IMessageHandlerContext context)
-        {  
+        {
             log.Info($"new GetUserRuquest : {message}");
-            var user = _appDbContext.Users.FirstOrDefault(u => (message.Username == null || u.Username == message.Username) &&
+            try
+            {
+                var user = _appDbContext.Users.FirstOrDefault(u => (message.Username == null || u.Username == message.Username) &&
                 (message.PasswordHash == null || u.PasswordHash == message.PasswordHash));
 
-            return context.Reply(new GetUserResponse
+                return context.Reply(new GetUserResponse
+                {
+                    UserInfo = user == null ? null : new UserInfo
+                    {
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Username = user.Username,
+                        PasswordHash = user.PasswordHash,
+                        UserId = user.Id
+                    }
+                });
+            }
+            catch (System.Exception ex)
             {
-                UserInfo =user == null ? null : new UserInfo
-                {                    
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Username = user.Username,
-                    PasswordHash = user.PasswordHash,
-                    UserId = user.Id
-                }
-            });
+                log.Error(ex.Message, ex);
+                throw;
+            }
 
         }
     }

@@ -19,17 +19,25 @@ namespace StorageService
         public Task Handle(GetGeoLineHistory message, IMessageHandlerContext context)
         {
             log.Info($"new GetGeoHistoryRequest : {message}");
-            var histories = _appDbContext.ResultHistories.Where(c => c.UserId == message.UserId).Select(c => new GeoLineResult
+            try
             {
-                Distance = c.DistanceResult,
-                FromLat = c.FromLat,
-                FromLong = c.FromLong,
-                ToLong = c.ToLong,
-                ToLat = c.ToLat,
-                UserId = c.UserId
-            }).ToList();
+                var histories = _appDbContext.ResultHistories.Where(c => c.UserId == message.UserId).Select(c => new GeoLineResult
+                {
+                    Distance = c.DistanceResult,
+                    FromLat = c.FromLat,
+                    FromLong = c.FromLong,
+                    ToLong = c.ToLong,
+                    ToLat = c.ToLat,
+                    UserId = c.UserId
+                }).ToList();
 
-            return context.Reply(new GeoLineHistories { GeoLines = histories });
+                return context.Reply(new GeoLineHistories { GeoLines = histories });
+            }
+            catch (System.Exception ex)
+            {
+                log.Error(ex.Message, ex);
+                throw;
+            }
         }
     }
 }

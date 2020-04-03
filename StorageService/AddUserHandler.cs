@@ -18,17 +18,25 @@ namespace StorageService
         public Task Handle(UserInfo message, IMessageHandlerContext context)
         {
             log.Info($"new AddUserRequest : {message}");
-            var user = new User
+            try
             {
-                FirstName = message.FirstName,
-                LastName = message.LastName,
-                Id = message.UserId,
-                PasswordHash = message.PasswordHash,
-                Username = message.Username
-            };
-            _appDbContext.Users.Add(user);
+                var user = new User
+                {
+                    FirstName = message.FirstName,
+                    LastName = message.LastName,
+                    Id = message.UserId,
+                    PasswordHash = message.PasswordHash,
+                    Username = message.Username
+                };
+                _appDbContext.Users.Add(user);
 
-            _appDbContext.SaveChanges();
+                _appDbContext.SaveChanges();
+            }
+            catch (System.Exception ex)
+            {
+                log.Error(ex.Message, ex);
+                throw;
+            }
 
             return context.Reply(new GetUserResponse(message));
         }
