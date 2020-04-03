@@ -39,7 +39,7 @@ now all the services are running and you can make api calls to http://localhost:
 Register a new User
 _http://localhost:5000/Users/Register_ 
 
-request body:
+POST request body:
 ```
 {
   "firstName" : "test",
@@ -48,7 +48,7 @@ request body:
   "password" : "strongPassword"
 }
 ```
-response body:
+POST response body:
 ```
 {
   "message" : "test@gmail.com created successfully, now you can login with provided username and password"
@@ -58,14 +58,14 @@ response body:
 login user 
 _http://localhost:5000/users/Authenticate_
 
-request body:
+POST request body:
 ```
 {
   "email" : "test@gmail.com",
   "password" : "strongPassword"
 }
 ```
-response body: (you will get a different one)
+POST response body: (you will get a different one)
 ```
 {
   "token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImU2ZTkyMDA5LWU1NzgtNDViZi1iZTRmLTYwNGM4M2M3MDcyMiIsIm5iZiI6MTU4NTkyNzc1MCwiZXhwIjoxNTg2NTMyNTUwLCJpYXQiOjE1ODU5Mjc3NTB9.m8HSA6zpBSnoPU_q5Met69N6gwLwssdfsdfpw7_orfZ4"
@@ -74,4 +74,18 @@ response body: (you will get a different one)
 
 next api calls must be authorized with token received in the last api call as Bearer token
 
-calculate distance between two geolocation points _http://localhost:5000/Geo/Calculate
+calculate distance between two geolocation points  _http://localhost:5000/Geo/CalculateDistance_
+POST request body:
+```
+{
+  "fromLat" : "LATITUDE",
+  "fromLong" : "LONGITUDE",
+  "toLat": "LATITUDE2",
+  "toLong" : "LONGITUDE2"
+}
+```
+
+see all previouse geo api calls made by me (USER) : _http://localhost:5000/geo/history_ (GET Request)
+
+**uinsg postman**
+all of the above api calls are stored in a postman collection named : _GeoAPI calls.postman_collection.json_ in solution folder
