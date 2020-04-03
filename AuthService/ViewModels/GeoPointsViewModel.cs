@@ -7,5 +7,14 @@ namespace AuthService.ViewModels
 
         public double ToLat { get; set; }
         public double ToLong { get; set; }
+
+        public override string ToString()
+        {
+            return $@"{nameof(GeoPointsViewModel)}@
+            {nameof(FromLat)}:{FromLat}
+            {nameof(FromLong)}:{FromLong}
+            {nameof(ToLat)}:{ToLat}
+            {nameof(ToLong)}:{ToLong}";
+        }
     }
 }

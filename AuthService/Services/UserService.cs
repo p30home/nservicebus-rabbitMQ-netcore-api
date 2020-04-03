@@ -43,7 +43,7 @@ namespace WebApi.Services
             });
 
             if (user.UserInfo != null)
-                throw new Exception("Provided email address is taken");
+                throw new AuthService.Exceptions.RegisterException("Provided email address is taken");
 
             var newUser = new UserInfo
             {
@@ -61,7 +61,7 @@ namespace WebApi.Services
         }
         public async Task<string> Authenticate(string username, string password)
         {
-        
+
             var user = await _busService.SendGetUserRequest(new GetUserRequest
             {
                 Username = username,
@@ -70,7 +70,7 @@ namespace WebApi.Services
 
             // return null if user not found
             if (user == null || user.UserInfo == null)
-                return null;
+                throw new AuthService.Exceptions.LoginException("Username or password is incorrect");
 
             // authentication successful so generate jwt token
             var tokenHandler = new JwtSecurityTokenHandler();
