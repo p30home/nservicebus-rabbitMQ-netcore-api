@@ -2,14 +2,14 @@ using System;
 
 namespace Shared
 {
-    public class AddUserResponse : AddUserRequest
+    public class GetUserResponse : AddUserRequest
     {
         public DateTime CreationDate { get; set; }
-        public AddUserResponse()
+        public GetUserResponse()
         {
 
         }
-        public AddUserResponse(AddUserRequest addUserRequest)
+        public GetUserResponse(AddUserRequest addUserRequest)
         {
             this.FirstName = addUserRequest.FirstName;
             this.LastName = addUserRequest.LastName;

@@ -8,14 +8,16 @@ using AuthService.Helpers;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using AuthService.Models;
+using AuthService.Services;
+using Shared;
+using System.Threading.Tasks;
 
 namespace WebApi.Services
 {
     public interface IUserService
     {
-        string Authenticate(string username, string password);
-        User Register(string firstName, string lastName, string username, string password);
-        IEnumerable<User> GetAll();
+        Task<string> Authenticate(string username, string password);
+        Task<GetUserResponse> Register(string firstName, string lastName, string username, string password);
     }
 
     public class UserService : IUserService
@@ -23,24 +25,28 @@ namespace WebApi.Services
 
         // users hardcoded for simplicity, store in a db with hashed passwords in production applications
 
-        
-        private readonly AppSettings _appSettings;
-        private readonly AppDbContext _dbContext;
 
-        public UserService(IOptions<AppSettings> appSettings, AppDbContext dbContext)
+        private readonly AppSettings _appSettings;
+        private readonly BusService _busService;
+
+        public UserService(IOptions<AppSettings> appSettings, BusService busService)
         {
             _appSettings = appSettings.Value;
-            _dbContext = dbContext;
+            _busService = busService;
         }
 
 
-        public User Register(string firstName, string lastName, string username, string password)
+        public async Task<GetUserResponse> Register(string firstName, string lastName, string username, string password)
         {
-            var user = _dbContext.Users.FirstOrDefault(x => x.Username == username);
-            if (user != null)
+            var user = await _busService.SendGetUserRequest(new Shared.GetUserRequest
+            {
+                Username = username
+            });
+
+            if (user != null || user.UserId == null)
                 throw new Exception("Provided email address is taken");
 
-            user = new User
+            var newUser = new AddUserRequest
             {
                 FirstName = firstName,
                 LastName = lastName,
@@ -48,18 +54,22 @@ namespace WebApi.Services
                 PasswordHash = CryptoAlgorithms.SHA256(password)
             };
 
-            _dbContext.Users.Add(user);
-            _dbContext.SaveChanges();
+            user = await _busService.SendAddUserRequest(newUser);
             return user;
 
 
         }
-        public string Authenticate(string username, string password)
+        public async Task<string> Authenticate(string username, string password)
         {
-            var user = _dbContext.Users.FirstOrDefault(x => x.Username == username && x.PasswordHash == CryptoAlgorithms.SHA256(password));
+        
+            var user = await _busService.SendGetUserRequest(new GetUserRequest
+            {
+                Username = username,
+                PasswordHash = CryptoAlgorithms.SHA256(password)
+            });
 
             // return null if user not found
-            if (user == null)
+            if (user == null || user.UserId == null)
                 return null;
 
             // authentication successful so generate jwt token
@@ -69,7 +79,7 @@ namespace WebApi.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.Id.ToString())
+                    new Claim(ClaimTypes.Name, user.UserId.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -77,11 +87,6 @@ namespace WebApi.Services
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
-        }
-
-        public IEnumerable<User> GetAll()
-        {
-            return _dbContext.Users.ToList();
         }
 
     }

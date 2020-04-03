@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using AuthService.Models;
+using AuthService.Services;
 using AuthService.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,12 +17,13 @@ namespace AuthService.Controllers
     public class GeoController : ControllerBase
     {
         private AppDbContext _dbContext;
-        private IMessageSession _messageSession;
+        private BusService _busService;
 
-        public GeoController(AppDbContext dbContext, IMessageSession messageSession)
+
+        public GeoController(AppDbContext dbContext, BusService busService)
         {
             _dbContext = dbContext;
-            _messageSession = messageSession;
+            _busService = busService;
         }
 
 
@@ -37,10 +39,8 @@ namespace AuthService.Controllers
                     ToLong = model.ToLong,
                     UserId = User.Identity.Name
                 };
-            var sendOptions = new SendOptions();
-            sendOptions.SetDestination("GeoAPI.GeoCalcServer");
-            var geoLineResponse = await _messageSession.Request<GeoLineResponse>(geoLineRequest, sendOptions);
 
+            var geoLineResponse = await _busService.SendGeoLineRequest(geoLineRequest);
             _dbContext.ResultHistories.Add(new ResultHistory
             {
                 UserId = User.Identity.Name,

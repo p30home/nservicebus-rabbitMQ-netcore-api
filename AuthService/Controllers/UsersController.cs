@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using AuthService.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,9 +20,9 @@ namespace AuthService.Controllers
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody]LoginViewModel model)
+        public async Task<IActionResult> Authenticate([FromBody]LoginViewModel model)
         {
-            var token = _userService.Authenticate(model.Email, model.Password);
+            var token = await _userService.Authenticate(model.Email, model.Password);
 
             if (token == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
@@ -31,11 +32,11 @@ namespace AuthService.Controllers
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public IActionResult Register([FromBody]RegisterViewModel model)
+        public async Task<IActionResult> Register([FromBody]RegisterViewModel model)
         {
             try
             {
-                var user = _userService.Register(model.FirstName, model.LastName, model.Email, model.Password);
+                var user = await _userService.Register(model.FirstName, model.LastName, model.Email, model.Password);
                 return Ok(new { message = $"{user.Username} created successfully, now you can login with provided username and password" });
             }
             catch (System.Exception ex)
