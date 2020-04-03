@@ -1,0 +1,206 @@
+{
+	"info": {
+		"_postman_id": "613e8edf-8a90-4f18-80d6-d26edf273c0a",
+		"name": "GeoAPI calls",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"firstName\" : \"test\",\n\t\"lastName\" : \"test\",\n\t\"email\" : \"test@gmail.com\",\n\t\"password\": \"samplePassword\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/users/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"users",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"test@gmail.com\",\n    \"password\": \"samplePassword\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/users/authenticate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"users",
+						"authenticate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Calculate",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjVlNDJmMWZlLTlhNDQtNDQ1NS1iZGZiLTU5Njk5NTM0OWY3YSIsIm5iZiI6MTU4NTkxNDc4MywiZXhwIjoxNTg2NTE5NTgzLCJpYXQiOjE1ODU5MTQ3ODN9.kcarR4JNORymHGINse5mCCJ-SGruXsRqmY4umEaF6MA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"fromLat\" : 34.0731482,\n\t\"fromLong\" : 49.6853895,\n\t\"toLat\" : 33.8879593,\n\t\"toLong\" : 48.7186999\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/geo/calculatedistance",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"geo",
+						"calculatedistance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Calculate Copy",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjVlNDJmMWZlLTlhNDQtNDQ1NS1iZGZiLTU5Njk5NTM0OWY3YSIsIm5iZiI6MTU4NTkxNDc4MywiZXhwIjoxNTg2NTE5NTgzLCJpYXQiOjE1ODU5MTQ3ODN9.kcarR4JNORymHGINse5mCCJ-SGruXsRqmY4umEaF6MA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"fromLat\" : 35.11564,\n\t\"fromLong\" : 49.7053895,\n\t\"toLat\" : 33.8879593,\n\t\"toLong\" : 48.7186999\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/geo/calculatedistance",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"geo",
+						"calculatedistance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GeoHistory",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjVlNDJmMWZlLTlhNDQtNDQ1NS1iZGZiLTU5Njk5NTM0OWY3YSIsIm5iZiI6MTU4NTkxNDc4MywiZXhwIjoxNTg2NTE5NTgzLCJpYXQiOjE1ODU5MTQ3ODN9.kcarR4JNORymHGINse5mCCJ-SGruXsRqmY4umEaF6MA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/geo/history",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"geo",
+						"history"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "801d1c3d-fc54-4235-846a-fc361089d568",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "c77cdd65-67c9-4a4a-b5cb-9710c826fa7d",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "8d81aaa7-4aa7-4807-b062-3d15872b01be",
+			"key": "token",
+			"value": null,
+			"type": "any"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
