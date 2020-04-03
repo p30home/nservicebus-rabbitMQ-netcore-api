@@ -40,7 +40,12 @@ namespace StorageService.Tests
         }
 
         [Theory]
-        [InlineData("","p30home@gmail.com","asdlfjkasdfjasdf","mojtaba","goodarzi")] //missing id
+        [InlineData("", "p30home@gmail.com", "asdlfjkasdfjasdf", "mojtaba", "goodarzi")] //missing id
+        [InlineData(null, "p30home@gmail.com", "asdlfjkasdfjasdf", "mojtaba", "goodarzi")] //missing id
+        [InlineData("asdfakhf", "", "asfdkhaslfdk", "mojtaba", "goodarzi")] //missing username
+        [InlineData("asdfakhf", null, "asfdkhaslfdk", "mojtaba", "goodarzi")] //missing username
+        [InlineData("asajfsdl", "p30home@gmail.com", null, "mojtaba", "goodariz")] // missing password
+        [InlineData("asajfsdl", "p30home@gmail.com", "", "mojtaba", "goodariz")] // missing password
         public void StorageService_AddNewUser_MissingRequireds(string userId, string username, string password, string firstName, string lastName)
         {
             Assert.ThrowsAny<Exception>(() => _dataContext.AddUser(new Shared.UserInfo
@@ -50,6 +55,54 @@ namespace StorageService.Tests
                 PasswordHash = password,
                 UserId = userId,
                 Username = username
+            }));
+        }
+
+        [Theory]
+        [InlineData()]
+        public void StorageService_AddNewUser_DuplicateIdCheck()
+        {
+            _dataContext.AddUser(new Shared.UserInfo
+            {
+                FirstName = "firstName",
+                LastName = "lastName",
+                PasswordHash = "password",
+                UserId = "userId",
+                Username = "username0"
+            });
+
+
+            Assert.ThrowsAny<Exception>(() => _dataContext.AddUser(new Shared.UserInfo //duplicate userId
+            {
+                FirstName = "firstName",
+                LastName = "lastName",
+                PasswordHash = "password",
+                UserId = "userId",
+                Username = "username"
+            }));
+        }
+
+        [Theory]
+        [InlineData()]
+        public void StorageService_AddNewUser_DuplicateUsernameCheck()
+        {
+            _dataContext.AddUser(new Shared.UserInfo
+            {
+                FirstName = "firstName",
+                LastName = "lastName",
+                PasswordHash = "password",
+                UserId = "userId0",
+                Username = "username"
+            });
+
+
+            Assert.ThrowsAny<Exception>(() => _dataContext.AddUser(new Shared.UserInfo //duplicate userId
+            {
+                FirstName = "firstName",
+                LastName = "lastName",
+                PasswordHash = "password",
+                UserId = "userId",
+                Username = "username"
             }));
         }
     }
