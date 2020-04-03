@@ -6,6 +6,17 @@ after login user get a jwt token
 an authenticated user may send API request to get a distance between two geolocation points.
 he is also able to send a GET request to see the histories of his api calls (for geoLocaltion distances)
 
+## Question :
+
+
+This project is pretty simple but you should implement this like a comprehensive enterprise project with all bells and whistles, multiple layers, services, dependencies, rabbitmq, nservicebus and so on.
+
+you should implement an API which able to calculate distance between two geographical points.
+User should be able to register & login with email and password and get JWT token using .net identity 
+authorized user should be able to call API with a token and two geographical point to get distance 
+all distance calculations should be stored in a database with user foreign key so authenticated user can get a list of all his previous requests.
+you may use "in memory database" for the sake of simplicity.
+please attach a postman collection or use swagger.
 
 ## Instructions to run project manually
 
