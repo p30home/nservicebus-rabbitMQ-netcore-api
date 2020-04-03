@@ -31,7 +31,7 @@ namespace AuthService
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
 
-            services.AddDbContext<AppDbContext>(config => config.UseInMemoryDatabase("interview"));
+            services.AddDbContext<AppDbContext>(config => config.UseInMemoryDatabase("in-memory"));
 
             // configure jwt authentication
             var appSettings = appSettingsSection.Get<AppSettings>();
