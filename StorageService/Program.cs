@@ -20,7 +20,7 @@ namespace StorageService
             // endpointConfiguration.UseTransport<LearningTransport>();
             var transport = endpointConfiguration.UseTransport<RabbitMQTransport>();
             transport.UseConventionalRoutingTopology();
-            transport.ConnectionString("host=localhost;username=guest;password=guest");
+            transport.ConnectionString(Environment.GetEnvironmentVariable("RABBITMQ_CONNECTION") ?? "host=localhost;username=guest;password=guest");
             endpointConfiguration.EnableInstallers();
             endpointConfiguration.UsePersistence<InMemoryPersistence>();
             endpointConfiguration.RegisterComponents(
