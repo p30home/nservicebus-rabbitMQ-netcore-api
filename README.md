@@ -1,0 +1,1 @@
+# nservicebus-rabbitMQ-netcore-api
