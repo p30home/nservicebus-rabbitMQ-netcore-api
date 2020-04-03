@@ -7,7 +7,7 @@ an authenticated user may send API request to get a distance between two geoloca
 he is also able to send a GET request to see the histories of his api calls (for geoLocaltion distances)
 
 
-## Instructions to run project
+## Instructions to run project manually
 
 **Install and run RabbitMQ**
 
@@ -24,5 +24,10 @@ to see if all tests pass
 
 run ```dotnet test```
 
+**Run each command in a _seperate_ terminal(Linux) or commandPrompt(Windows)**
 
+run StorageService Microservice : ```dotnet run --project StorageService/StorageService.csproj```
 
+run GeoCalcService Microservice : ```dotnet run --project GeoCalcService/GeoCalcService.csproj```
+
+run AuthService Microservice WebAPI : ```dotnet run --project AuthService/AuthService.csproj```
