@@ -1,10 +1,13 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using AuthService.Models;
 using AuthService.Services;
 using AuthService.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NServiceBus;
+using Shared;
 
 namespace AuthService.Controllers
 {
@@ -14,25 +17,39 @@ namespace AuthService.Controllers
     public class GeoController : ControllerBase
     {
         private AppDbContext _dbContext;
+        private IMessageSession _messageSession;
 
-        public GeoController(AppDbContext dbContext)
+        public GeoController(AppDbContext dbContext, IMessageSession messageSession)
         {
             _dbContext = dbContext;
+            _messageSession = messageSession;
         }
 
 
         [HttpPost("CalculateDistance")]
-        public IActionResult CalculateDistance([FromBody]GeoPointsViewModel model)
+        public async Task<IActionResult> CalculateDistance([FromBody]GeoPointsViewModel model)
         {
-            var result = distance(model.FromLat, model.FromLong, model.ToLat, model.ToLong);
+            var geoLineRequest =
+                new GeoLineRequest
+                {
+                    FromLat = model.FromLat,
+                    FromLong = model.FromLong,
+                    ToLat = model.ToLat,
+                    ToLong = model.ToLong,
+                    UserId = User.Identity.Name
+                };
+            var sendOptions = new SendOptions();
+            sendOptions.SetDestination("Samples.AsyncPages.Server");
+            var geoLineResponse = await _messageSession.Request<GeoLineResponse>(geoLineRequest, sendOptions);
+
             _dbContext.ResultHistories.Add(new ResultHistory
             {
                 UserId = User.Identity.Name,
-                DistanceResult = result,
-                FromLat = model.FromLat,
-                FromLong = model.FromLong,
-                ToLat = model.ToLat,
-                ToLong = model.ToLong
+                DistanceResult = geoLineResponse.Distance,
+                FromLat = geoLineResponse.FromLat,
+                FromLong = geoLineResponse.FromLong,
+                ToLat = geoLineResponse.ToLat,
+                ToLong = geoLineResponse.ToLong
             });
 
             _dbContext.SaveChanges();
@@ -54,43 +71,5 @@ namespace AuthService.Controllers
             return Ok(histories);
         }
 
-
-        private double deg2rad(double deg)
-        {
-            return (deg * Math.PI / 180.0);
-        }
-
-        private double rad2deg(double rad)
-        {
-            return (rad / Math.PI * 180.0);
-        }
-
-        /// <summary>
-        /// calculates distance between two points and returns result as Killometers
-        /// </summary>
-        /// <param name="lat1"></param>
-        /// <param name="lon1"></param>
-        /// <param name="lat2"></param>
-        /// <param name="lon2"></param>
-        /// <returns></returns>
-        private double distance(double lat1, double lon1, double lat2, double lon2)
-        {
-            if ((lat1 == lat2) && (lon1 == lon2))
-            {
-                return 0;
-            }
-            else
-            {
-                double theta = lon1 - lon2;
-                double dist = Math.Sin(deg2rad(lat1)) * Math.Sin(deg2rad(lat2)) + Math.Cos(deg2rad(lat1)) * Math.Cos(deg2rad(lat2)) * Math.Cos(deg2rad(theta));
-                dist = Math.Acos(dist);
-                dist = rad2deg(dist);
-                dist = dist * 60 * 1.1515;
-
-                dist = dist * 1.609344;
-
-                return (dist);
-            }
-        }
     }
 }

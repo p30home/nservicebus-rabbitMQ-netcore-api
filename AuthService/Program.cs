@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NServiceBus;
 
 namespace AuthService
 {
@@ -21,6 +22,14 @@ namespace AuthService
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                })
+                .UseNServiceBus(context =>
+                {
+                    var endpointConfiguration = new EndpointConfiguration("Samples.AsyncPages.WebApplication");
+                    endpointConfiguration.MakeInstanceUniquelyAddressable("1");
+                    endpointConfiguration.EnableCallbacks();
+                    endpointConfiguration.UseTransport<LearningTransport>();
+                    return endpointConfiguration;
                 });
     }
 }

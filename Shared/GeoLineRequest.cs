@@ -6,6 +6,11 @@ namespace Shared
         {
         }
 
+        public GeoLineRequest(GeoLineRequest geoLineRequest): base(geoLineRequest)
+        {
+            this.UserId = geoLineRequest.UserId;
+        }
+
         public GeoLineRequest(GeoLine geoLine,string userId) : base(geoLine)
         {
             this.UserId = userId;

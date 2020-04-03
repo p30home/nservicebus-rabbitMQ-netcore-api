@@ -8,7 +8,7 @@ namespace Shared
         }
 
 
-        public GeoLineResponse(GeoLineRequest geoLineRequest,double distance) : base(geoLineRequest)
+        public GeoLineResponse(GeoLineRequest geoLineRequest, double distance) : base(geoLineRequest)
         {
             this.Distance = distance;
         }
