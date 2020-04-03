@@ -35,7 +35,7 @@ namespace GeoCalcService
         /// <returns></returns>
         public static double Calculate(double lat1, double lon1, double lat2, double lon2)
         {
-            if(lat1 < -90 || lat1 > +90)
+            if((lat1 < -90 || lat1 > +90) || (lat2 < -90 || lat2 > +90))
                 throw new Exceptions.OffboundException("latitude must be between +90 and -90");
             if ((lat1 == lat2) && (lon1 == lon2))
             {
