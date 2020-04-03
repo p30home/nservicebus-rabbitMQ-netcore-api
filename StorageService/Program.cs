@@ -31,6 +31,8 @@ namespace StorageService
                         var optionBuilder = new DbContextOptionsBuilder().UseInMemoryDatabase("in-memory");
                         return new Models.AppDbContext(optionBuilder.Options);
                     }, DependencyLifecycle.InstancePerCall);
+
+                    configureComponents.ConfigureComponent<DataContext>(DependencyLifecycle.InstancePerCall);
                 }
             );
 

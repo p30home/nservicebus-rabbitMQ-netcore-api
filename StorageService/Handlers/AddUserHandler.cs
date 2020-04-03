@@ -8,29 +8,20 @@ namespace StorageService
 {
     public class AddUserHandler : IHandleMessages<UserInfo>
     {
-        public AddUserHandler(AppDbContext appDbContext)
+        public AddUserHandler(DataContext dataContext)
         {
-            _appDbContext = appDbContext;
+            _dataContext = dataContext;
         }
         static ILog log = LogManager.GetLogger<AddUserHandler>();
-        private AppDbContext _appDbContext;
+
+        private DataContext _dataContext;
 
         public Task Handle(UserInfo message, IMessageHandlerContext context)
         {
             log.Info($"new AddUserRequest : {message}");
             try
             {
-                var user = new User
-                {
-                    FirstName = message.FirstName,
-                    LastName = message.LastName,
-                    Id = message.UserId,
-                    PasswordHash = message.PasswordHash,
-                    Username = message.Username
-                };
-                _appDbContext.Users.Add(user);
-
-                _appDbContext.SaveChanges();
+                _dataContext.AddUser(message);
             }
             catch (System.Exception ex)
             {

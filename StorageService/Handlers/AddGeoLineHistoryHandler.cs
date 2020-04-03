@@ -9,27 +9,18 @@ namespace StorageService
     public class AddGeoLineHistoryHandler : IHandleMessages<GeoLineResult>
     {
         private static ILog log = LogManager.GetLogger<AddGeoLineHistoryHandler>();
-        private AppDbContext _appDbContext;
+        private DataContext _dataContext;
 
-        public AddGeoLineHistoryHandler(AppDbContext appDbContext)
+        public AddGeoLineHistoryHandler(DataContext dataContext)
         {
-            _appDbContext = appDbContext;
+            _dataContext = dataContext;
         }
         public Task Handle(GeoLineResult message, IMessageHandlerContext context)
         {
             log.Info($"new AddGeoHistoryRequest : {message}");
             try
             {
-                _appDbContext.ResultHistories.Add(new ResultHistory
-                {
-                    UserId = message.UserId,
-                    DistanceResult = message.Distance,
-                    FromLat = message.FromLat,
-                    FromLong = message.FromLong,
-                    ToLat = message.ToLat,
-                    ToLong = message.ToLong
-                });
-                _appDbContext.SaveChanges();
+                _dataContext.AddGeuLineHistory(message);
             }
             catch (System.Exception ex)
             {

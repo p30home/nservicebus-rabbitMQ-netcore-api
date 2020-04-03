@@ -9,32 +9,19 @@ namespace StorageService
 {
     public class GetUserHandler : IHandleMessages<GetUserRequest>
     {
-        public GetUserHandler(AppDbContext appDbContext)
+        public GetUserHandler(DataContext dataContext)
         {
-            _appDbContext = appDbContext;
+            _dataContext = dataContext;
         }
         private static ILog log = LogManager.GetLogger<GetUserHandler>();
-        private AppDbContext _appDbContext;
+        private DataContext _dataContext;
 
         public Task Handle(GetUserRequest message, IMessageHandlerContext context)
         {
             log.Info($"new GetUserRuquest : {message}");
             try
             {
-                var user = _appDbContext.Users.FirstOrDefault(u => (message.Username == null || u.Username == message.Username) &&
-                (message.PasswordHash == null || u.PasswordHash == message.PasswordHash));
-
-                return context.Reply(new GetUserResponse
-                {
-                    UserInfo = user == null ? null : new UserInfo
-                    {
-                        FirstName = user.FirstName,
-                        LastName = user.LastName,
-                        Username = user.Username,
-                        PasswordHash = user.PasswordHash,
-                        UserId = user.Id
-                    }
-                });
+                return context.Reply(_dataContext.GetUser(message.Username, message.PasswordHash));
             }
             catch (System.Exception ex)
             {
