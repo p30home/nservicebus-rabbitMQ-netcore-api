@@ -53,7 +53,14 @@ namespace AuthService.Controllers
             });
 
             _dbContext.SaveChanges();
-            return Ok(result);
+            return Ok(new
+            {
+                FromLat = model.FromLat,
+                FromLong = model.FromLong,
+                ToLat = model.ToLat,
+                ToLong = model.ToLong,
+                Distance = geoLineResponse.Distance
+            });
         }
 
         [HttpGet("history")]

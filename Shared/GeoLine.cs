@@ -1,6 +1,8 @@
+using NServiceBus;
+
 namespace Shared
 {
-    public class GeoLine
+    public class GeoLine : IMessage
     {
         public GeoLine()
         {
