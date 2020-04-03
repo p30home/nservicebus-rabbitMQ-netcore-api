@@ -31,3 +31,45 @@ run StorageService Microservice : ```dotnet run --project StorageService/Storage
 run GeoCalcService Microservice : ```dotnet run --project GeoCalcService/GeoCalcService.csproj```
 
 run AuthService Microservice WebAPI : ```dotnet run --project AuthService/AuthService.csproj```
+
+now all the services are running and you can make api calls to http://localhost:5000
+
+**List of API calls**
+
+Register a new User
+_http://localhost:5000/Users/Register_ 
+
+request body:
+```
+{
+  "firstName" : "test",
+  "lastName" :"test",
+  "email" : "test@gmail.com",
+  "password" : "strongPassword"
+}
+```
+response body:
+```
+{
+  "message" : "test@gmail.com created successfully, now you can login with provided username and password"
+}
+```
+
+login user 
+_http://localhost:5000/users/Authenticate_
+
+request body:
+```
+{
+  "email" : "test@gmail.com",
+  "password" : "strongPassword"
+}
+```
+response body: (you will get a different one)
+```
+{
+  "token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImU2ZTkyMDA5LWU1NzgtNDViZi1iZTRmLTYwNGM4M2M3MDcyMiIsIm5iZiI6MTU4NTkyNzc1MCwiZXhwIjoxNTg2NTMyNTUwLCJpYXQiOjE1ODU5Mjc3NTB9.m8HSA6zpBSnoPU_q5Met69N6gwLwssdfsdfpw7_orfZ4"
+}
+```
+
+next api calls must be authorized with token received in the last api call as Bearer token
