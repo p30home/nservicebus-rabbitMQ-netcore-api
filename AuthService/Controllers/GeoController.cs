@@ -38,7 +38,7 @@ namespace AuthService.Controllers
                     UserId = User.Identity.Name
                 };
             var sendOptions = new SendOptions();
-            sendOptions.SetDestination("Samples.AsyncPages.Server");
+            sendOptions.SetDestination("GeoAPI.GeoCalcServer");
             var geoLineResponse = await _messageSession.Request<GeoLineResponse>(geoLineRequest, sendOptions);
 
             _dbContext.ResultHistories.Add(new ResultHistory

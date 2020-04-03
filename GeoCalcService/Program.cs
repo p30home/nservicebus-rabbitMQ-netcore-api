@@ -8,8 +8,8 @@ namespace GeoCalcService
     {
         static async Task Main(string[] args)
         {
-            Console.Title = "Samples.AsyncPages.Server";
-            var endpointConfiguration = new EndpointConfiguration("Samples.AsyncPages.Server");
+            Console.Title = "GeoAPI.GeoCalcServer";
+            var endpointConfiguration = new EndpointConfiguration("GeoAPI.GeoCalcServer");
             endpointConfiguration.EnableCallbacks(makesRequests: false);
             // endpointConfiguration.UsePersistence<InMemoryPersistence>();
             // endpointConfiguration.UseTransport<LearningTransport>();

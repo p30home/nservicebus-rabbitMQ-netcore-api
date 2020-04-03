@@ -25,7 +25,7 @@ namespace AuthService
                 })
                 .UseNServiceBus(context =>
                 {
-                    var endpointConfiguration = new EndpointConfiguration("Samples.AsyncPages.WebApplication");
+                    var endpointConfiguration = new EndpointConfiguration("GeoAPI.AuthService");
                     endpointConfiguration.MakeInstanceUniquelyAddressable("1");
                     endpointConfiguration.EnableCallbacks();
                     var transport = endpointConfiguration.UseTransport<RabbitMQTransport>();
