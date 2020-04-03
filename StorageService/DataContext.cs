@@ -31,6 +31,8 @@ namespace StorageService
 
         public void AddUser(UserInfo message)
         {
+            if(string.IsNullOrWhiteSpace(message.UserId))
+                throw new ArgumentNullException(nameof(message.UserId));
             var user = new User
             {
                 FirstName = message.FirstName,
