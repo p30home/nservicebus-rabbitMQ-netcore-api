@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoCalcService", "GeoCalcSe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{1B0CF605-935E-4579-A579-7EB9F60324F8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{919C1C88-EE77-4946-A1E2-EB6DD7D4377E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,5 +60,17 @@ Global
 		{1B0CF605-935E-4579-A579-7EB9F60324F8}.Release|x64.Build.0 = Release|Any CPU
 		{1B0CF605-935E-4579-A579-7EB9F60324F8}.Release|x86.ActiveCfg = Release|Any CPU
 		{1B0CF605-935E-4579-A579-7EB9F60324F8}.Release|x86.Build.0 = Release|Any CPU
+		{919C1C88-EE77-4946-A1E2-EB6DD7D4377E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{919C1C88-EE77-4946-A1E2-EB6DD7D4377E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{919C1C88-EE77-4946-A1E2-EB6DD7D4377E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{919C1C88-EE77-4946-A1E2-EB6DD7D4377E}.Debug|x64.Build.0 = Debug|Any CPU
+		{919C1C88-EE77-4946-A1E2-EB6DD7D4377E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{919C1C88-EE77-4946-A1E2-EB6DD7D4377E}.Debug|x86.Build.0 = Debug|Any CPU
+		{919C1C88-EE77-4946-A1E2-EB6DD7D4377E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{919C1C88-EE77-4946-A1E2-EB6DD7D4377E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{919C1C88-EE77-4946-A1E2-EB6DD7D4377E}.Release|x64.ActiveCfg = Release|Any CPU
+		{919C1C88-EE77-4946-A1E2-EB6DD7D4377E}.Release|x64.Build.0 = Release|Any CPU
+		{919C1C88-EE77-4946-A1E2-EB6DD7D4377E}.Release|x86.ActiveCfg = Release|Any CPU
+		{919C1C88-EE77-4946-A1E2-EB6DD7D4377E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
