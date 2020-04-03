@@ -28,7 +28,11 @@ namespace AuthService
                     var endpointConfiguration = new EndpointConfiguration("Samples.AsyncPages.WebApplication");
                     endpointConfiguration.MakeInstanceUniquelyAddressable("1");
                     endpointConfiguration.EnableCallbacks();
-                    endpointConfiguration.UseTransport<LearningTransport>();
+                    var transport = endpointConfiguration.UseTransport<RabbitMQTransport>();
+                    transport.UseConventionalRoutingTopology();
+                    transport.ConnectionString("host=localhost;username=guest;password=guest");
+                    endpointConfiguration.EnableInstallers();
+                    endpointConfiguration.UsePersistence<InMemoryPersistence>();
                     return endpointConfiguration;
                 });
     }

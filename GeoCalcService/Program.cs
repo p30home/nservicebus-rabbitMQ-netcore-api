@@ -11,8 +11,14 @@ namespace GeoCalcService
             Console.Title = "Samples.AsyncPages.Server";
             var endpointConfiguration = new EndpointConfiguration("Samples.AsyncPages.Server");
             endpointConfiguration.EnableCallbacks(makesRequests: false);
-            endpointConfiguration.UsePersistence<LearningPersistence>();
-            endpointConfiguration.UseTransport<LearningTransport>();
+            // endpointConfiguration.UsePersistence<InMemoryPersistence>();
+            // endpointConfiguration.UseTransport<LearningTransport>();
+            var transport = endpointConfiguration.UseTransport<RabbitMQTransport>();
+            transport.UseConventionalRoutingTopology();
+            transport.ConnectionString("host=localhost;username=guest;password=guest");
+            endpointConfiguration.EnableInstallers();
+            endpointConfiguration.UsePersistence<InMemoryPersistence>();
+
 
             var endpointInstance = await Endpoint.Start(endpointConfiguration)
                 .ConfigureAwait(false);
