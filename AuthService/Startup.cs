@@ -7,8 +7,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using AuthService.Helpers;
-using AuthService.Models;
-using Microsoft.EntityFrameworkCore;
 using AuthService.Services;
 
 namespace AuthService
@@ -32,7 +30,7 @@ namespace AuthService
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
 
-            services.AddDbContext<AppDbContext>(config => config.UseInMemoryDatabase("in-memory"));
+        
             services.AddTransient<BusService>();
 
             // configure jwt authentication

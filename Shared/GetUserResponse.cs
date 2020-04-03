@@ -1,21 +1,19 @@
 using System;
+using NServiceBus;
 
 namespace Shared
 {
-    public class GetUserResponse : AddUserRequest
+    public class GetUserResponse : IMessage
     {
-        public DateTime CreationDate { get; set; }
+
+        public UserInfo UserInfo { get; set; }
         public GetUserResponse()
         {
 
         }
-        public GetUserResponse(AddUserRequest addUserRequest)
+        public GetUserResponse(UserInfo userInfo)
         {
-            this.FirstName = addUserRequest.FirstName;
-            this.LastName = addUserRequest.LastName;
-            this.Username = addUserRequest.Username;
-            this.PasswordHash = addUserRequest.PasswordHash;
-            this.CreationDate = DateTime.UtcNow;
+            this.UserInfo = userInfo;
 
         }
     }

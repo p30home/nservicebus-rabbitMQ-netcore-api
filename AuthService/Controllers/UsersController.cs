@@ -37,7 +37,7 @@ namespace AuthService.Controllers
             try
             {
                 var user = await _userService.Register(model.FirstName, model.LastName, model.Email, model.Password);
-                return Ok(new { message = $"{user.Username} created successfully, now you can login with provided username and password" });
+                return Ok(new { message = $"{user.UserInfo.Username} created successfully, now you can login with provided username and password" });
             }
             catch (System.Exception ex)
             {

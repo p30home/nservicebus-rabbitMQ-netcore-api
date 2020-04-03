@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using AuthService.Models;
 using AuthService.Services;
 using AuthService.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -16,13 +15,13 @@ namespace AuthService.Controllers
     [Route("[controller]")]
     public class GeoController : ControllerBase
     {
-        private AppDbContext _dbContext;
+
         private BusService _busService;
 
 
-        public GeoController(AppDbContext dbContext, BusService busService)
+        public GeoController(BusService busService)
         {
-            _dbContext = dbContext;
+
             _busService = busService;
         }
 
@@ -41,17 +40,18 @@ namespace AuthService.Controllers
                 };
 
             var geoLineResponse = await _busService.SendGeoLineRequest(geoLineRequest);
-            _dbContext.ResultHistories.Add(new ResultHistory
+
+            await _busService.SaveGeoLineResult(new GeoLineResult
             {
                 UserId = User.Identity.Name,
-                DistanceResult = geoLineResponse.Distance,
+                Distance = geoLineResponse.Distance,
                 FromLat = geoLineResponse.FromLat,
                 FromLong = geoLineResponse.FromLong,
                 ToLat = geoLineResponse.ToLat,
                 ToLong = geoLineResponse.ToLong
             });
 
-            _dbContext.SaveChanges();
+
             return Ok(new
             {
                 FromLat = model.FromLat,
@@ -63,15 +63,15 @@ namespace AuthService.Controllers
         }
 
         [HttpGet("history")]
-        public IActionResult History()
+        public async Task<IActionResult> History()
         {
-            var histories = _dbContext.ResultHistories.Where(c => c.UserId == User.Identity.Name).Select(c => new
+            var histories = (await _busService.GetGeoLineHistories(new GetGeoLineHistory { UserId = User.Identity.Name })).GeoLines.Select(c => new
             {
                 c.FromLong,
                 c.FromLat,
                 c.ToLong,
                 c.ToLat,
-                c.DistanceResult
+                c.Distance
             }).ToList();
 
             return Ok(histories);

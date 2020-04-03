@@ -6,7 +6,7 @@ namespace Shared
     {
         public GeoLine()
         {
-            
+
         }
 
         public GeoLine(GeoLine geoLine)
@@ -20,5 +20,14 @@ namespace Shared
         public double FromLong { get; set; }
         public double ToLat { get; set; }
         public double ToLong { get; set; }
+
+        public override string ToString()
+        {
+            return $@"{nameof(GeoLine)}@
+            {nameof(FromLat)}:{FromLat}
+            {nameof(FromLong)}:{FromLong}
+            {nameof(ToLat)}:{ToLat}
+            {nameof(ToLong)}:{ToLong}";
+        }
     }
 }

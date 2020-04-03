@@ -7,7 +7,6 @@ using System.Text;
 using AuthService.Helpers;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using AuthService.Models;
 using AuthService.Services;
 using Shared;
 using System.Threading.Tasks;
@@ -43,11 +42,12 @@ namespace WebApi.Services
                 Username = username
             });
 
-            if (user != null || user.UserId == null)
+            if (user.UserInfo != null)
                 throw new Exception("Provided email address is taken");
 
-            var newUser = new AddUserRequest
+            var newUser = new UserInfo
             {
+                UserId = Guid.NewGuid().ToString(),
                 FirstName = firstName,
                 LastName = lastName,
                 Username = username,
@@ -69,7 +69,7 @@ namespace WebApi.Services
             });
 
             // return null if user not found
-            if (user == null || user.UserId == null)
+            if (user == null || user.UserInfo == null)
                 return null;
 
             // authentication successful so generate jwt token
@@ -79,7 +79,7 @@ namespace WebApi.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.UserId.ToString())
+                    new Claim(ClaimTypes.Name, user.UserInfo.UserId.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

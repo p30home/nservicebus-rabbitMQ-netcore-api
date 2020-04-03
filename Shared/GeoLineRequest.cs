@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace Shared
 {
     public class GeoLineRequest : GeoLine
@@ -16,5 +18,12 @@ namespace Shared
             this.UserId = userId;
         }
         public string UserId { get; set; }
+
+        public override string ToString()
+        {
+            return $@"{nameof(GeoLineRequest)}@
+            {base.ToString().Split('@').LastOrDefault()}
+            {nameof(UserId)}:{UserId}";
+        }
     }
 }

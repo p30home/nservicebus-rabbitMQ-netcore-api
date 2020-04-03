@@ -11,6 +11,7 @@ namespace StorageService.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Username { get; set; }
-        public string PasswordHash { get; set; }public string Token { get; set; }
+        public string PasswordHash { get; set; }
+        public DateTime CreationDate { get; set; } = DateTime.Now;
     }
 }

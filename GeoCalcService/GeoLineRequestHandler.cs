@@ -13,7 +13,7 @@ namespace GeoCalcService
             log.Info($"New GeoLine request: {message}");
             Task reply;
             var distance = GeoDistanceCalculator.Calculate(message);
-            reply = context.Reply(new GeoLineResponse(message,distance));
+            reply = context.Reply(new GeoLineResult(message,distance));
             return reply;
         }
     }

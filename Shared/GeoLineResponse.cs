@@ -1,17 +1,27 @@
+using System.Linq;
+
 namespace Shared
 {
-    public class GeoLineResponse : GeoLineRequest
+    public class GeoLineResult : GeoLineRequest
     {
-        public GeoLineResponse() : base()
+        public GeoLineResult() : base()
         {
 
         }
 
 
-        public GeoLineResponse(GeoLineRequest geoLineRequest, double distance) : base(geoLineRequest)
+        public GeoLineResult(GeoLineRequest geoLineRequest, double distance) : base(geoLineRequest)
         {
             this.Distance = distance;
         }
         public double Distance { get; set; }
+
+        public override string ToString()
+        {
+            return $@"{nameof(GeoLineResult)}@
+            {base.ToString().Split('@').LastOrDefault()}
+            {nameof(Distance)}:{Distance}";
+            
+        }
     }
 }
